@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class TouchManager : MonoBehaviour, ITouchController
 {
-    public void drag(Vector2 current_position)
+    IControllable selectedObject = null;
+    public void drag(List<Vector2> positions)
     {
         print("I have been dragged");
+        if (selectedObject != null)
+        {
+            selectedObject.drag(positions);
+        }
     }
 
     public void pinch(Vector2 position1, Vector2 position2, float relative_distance)
@@ -24,7 +29,12 @@ public class TouchManager : MonoBehaviour, ITouchController
         {
             print("i hit something");
             IControllable controllable = hitInfo.transform.GetComponent<IControllable>();
+            selectedObject = controllable;
             controllable.selectToggle();
+        }
+        else
+        {
+            selectedObject = null;
         }
     }
 

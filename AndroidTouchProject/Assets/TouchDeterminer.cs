@@ -27,36 +27,48 @@ public class TouchDeterminer : MonoBehaviour
         {
             Touch[] all_touches = Input.touches;
             Touch firstTouch = all_touches[0];
+            List<Vector2> touchPositions = new List<Vector2>();
             print(firstTouch.phase);
-            switch (firstTouch.phase)
+
+            switch (all_touches.Length)
             {
-                case TouchPhase.Began:
-                    tapTimer = 0f;
-                    hasMoved = false;
-                    break;
-
-                case TouchPhase.Moved:
-                    hasMoved = true;
-                    break;
-
-                case TouchPhase.Stationary:
-                    break;
-
-                case TouchPhase.Ended:
-                    if ((tapTimer < MAX_ALLOWED_TAP_TIME) && !hasMoved)
+                case 1:
+                    touchPositions.Add(firstTouch.position);
+                    switch (firstTouch.phase)
                     {
-                        //print("Tapped at " + firstTouch.position + " Duration: " + tapTimer + " seconds");
-                        //Ray tapRay = Camera.main.ScreenPointToRay(firstTouch.position);
-                        //if (Physics.Raycast(tapRay))
-                        //{
-                        //    print("I hit something");
-                        //}
-                        manager.tap(firstTouch.position);
+                        case TouchPhase.Began:
+                            tapTimer = 0f;
+                            hasMoved = false;
+                            break;
+
+                        case TouchPhase.Moved:
+                            hasMoved = true;
+                            if (tapTimer > MAX_ALLOWED_TAP_TIME && hasMoved)
+                            {
+                                manager.drag(touchPositions);
+                            }
+                            break;
+
+                        case TouchPhase.Stationary:
+                            break;
+
+                        case TouchPhase.Ended:
+                            if ((tapTimer < MAX_ALLOWED_TAP_TIME) && !hasMoved)
+                            {
+                                //print("Tapped at " + firstTouch.position + " Duration: " + tapTimer + " seconds");
+                                //Ray tapRay = Camera.main.ScreenPointToRay(firstTouch.position);
+                                //if (Physics.Raycast(tapRay))
+                                //{
+                                //    print("I hit something");
+                                //}
+                                manager.tap(firstTouch.position);
+                            }
+                            touchPositions.Clear();
+                            break;
                     }
-                    else if (tapTimer > MAX_ALLOWED_TAP_TIME && hasMoved)
-                    {
-                        manager.drag(firstTouch.position);
-                    }
+                    break;
+                case 2:
+
                     break;
             }
         }
