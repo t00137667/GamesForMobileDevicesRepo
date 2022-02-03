@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TouchManager : MonoBehaviour, ITouchController
 {
     IControllable selectedObject = null;
+    IControllable controllableFound;
+    IControllable[] controllables;
     public void drag(List<Vector2> positions)
     {
         print("I have been dragged");
-        if (selectedObject != null)
+        if (selectedObject != null && controllableFound == selectedObject)
         {
             selectedObject.drag(positions);
         }
@@ -29,8 +32,17 @@ public class TouchManager : MonoBehaviour, ITouchController
         {
             print("i hit something");
             IControllable controllable = hitInfo.transform.GetComponent<IControllable>();
+            if (selectedObject != null)
+            {
+                for (int i = 0; i < controllables.Length; i++)
+                {
+                    IControllable c = controllables[i];
+                    c.selectToggle(false);
+                }
+                selectedObject = null;
+            }
             selectedObject = controllable;
-            controllable.selectToggle();
+            selectedObject.selectToggle(true);
         }
         else
         {
@@ -38,10 +50,41 @@ public class TouchManager : MonoBehaviour, ITouchController
         }
     }
 
+    public void ControllableFound(Vector2 touchPosition)
+    {
+        Ray tapRay = Camera.main.ScreenPointToRay(touchPosition);
+        Debug.DrawRay(tapRay.origin, tapRay.direction * 50, Color.red, 4f);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(tapRay, out hitInfo))
+        {
+            IControllable controllable = hitInfo.transform.GetComponent<IControllable>();
+            if (controllable == null)
+            {
+                controllableFound = null;
+                print("Controllable not Found");
+            }
+            else
+            {
+                controllableFound = controllable;
+                print("Controllable Found");
+            }
+        }
+        else
+        {
+            controllableFound = null;
+        }
+    }
+
+    public void ClearControllable()
+    {
+        controllableFound = null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        controllableFound = null;
+        controllables = FindObjectsOfType<MonoBehaviour>().OfType<IControllable>().ToArray();
     }
 
     // Update is called once per frame

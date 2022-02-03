@@ -21,9 +21,9 @@ public class CubeControl : MonoBehaviour, IControllable
         
     }
 
-    public bool selectToggle()
+    public bool selectToggle(bool selected)
     {
-        isSelected = !isSelected;
+        isSelected = selected;
         if (isSelected)
         {
             cubeRenderer.material.color = Color.red;
@@ -43,5 +43,10 @@ public class CubeControl : MonoBehaviour, IControllable
             Vector3 pos = new Vector3(lastPosition.x, lastPosition.y, transform.position.z - Camera.main.transform.position.z );
             transform.position = Camera.main.ScreenToWorldPoint(pos);
         }
+    }
+
+    public void tap()
+    {
+        throw new System.NotImplementedException();
     }
 }
