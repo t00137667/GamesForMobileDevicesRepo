@@ -39,6 +39,7 @@ public class TouchDeterminer : MonoBehaviour
                         case TouchPhase.Began:
                             tapTimer = 0f;
                             hasMoved = false;
+                            manager.ControllableFound(firstTouch.position);
                             break;
 
                         case TouchPhase.Moved:
@@ -64,11 +65,12 @@ public class TouchDeterminer : MonoBehaviour
                                 manager.tap(firstTouch.position);
                             }
                             touchPositions.Clear();
+                            manager.ClearControllable();
                             break;
                     }
                     break;
                 case 2:
-
+                    print("Two fingers Detected");
                     break;
             }
         }
