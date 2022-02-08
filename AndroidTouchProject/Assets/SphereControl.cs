@@ -5,15 +5,42 @@ using UnityEngine;
 public class SphereControl : MonoBehaviour, IControllable
 {
     Renderer myRenderer;
+    Collider planeCollider, sphereCollider;
     private bool isSelected = false;
     public void drag(List<Vector2> positions)
     {
-        throw new System.NotImplementedException();
+        Vector2 position = positions[positions.Count - 1];
+        Ray tapRay = Camera.main.ScreenPointToRay(position);
+        Debug.DrawRay(tapRay.origin, tapRay.direction * 50, Color.red, 4f);
+        RaycastHit hitInfo;
+        ColliderToggle();
+        if (Physics.Raycast(tapRay, out hitInfo))
+        {
+            print("i hit something");
+            transform.position = hitInfo.point;
+        }
+        else
+        {
+            print("I hit nothing");
+        }
+        ColliderToggle();
     }
 
     public bool selectToggle(bool selected)
     {
         isSelected = selected;
+        ColourUpdate();
+        return isSelected;
+    }
+
+    public void tap(Vector2 position)
+    {
+        isSelected = !isSelected;
+        ColourUpdate();
+    }
+
+    private void ColourUpdate()
+    {
         if (isSelected)
         {
             myRenderer.material.color = Color.red;
@@ -22,18 +49,35 @@ public class SphereControl : MonoBehaviour, IControllable
         {
             myRenderer.material.color = Color.white;
         }
-        return isSelected;
     }
-
-    public void tap()
+    private void ColliderToggle()
     {
-        throw new System.NotImplementedException();
+        if (sphereCollider.enabled)
+        {
+            sphereCollider.enabled = false;
+            planeCollider.enabled = true;
+        }
+        else
+        {
+            sphereCollider.enabled = true;
+            planeCollider.enabled = false;
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
         myRenderer = GetComponent<Renderer>();
+        sphereCollider = GetComponent<Collider>();
+        GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        plane.transform.position = transform.position;
+        plane.transform.Rotate(new Vector3(1, 0, 0), -90f);
+        plane.transform.localScale = plane.transform.localScale * 5f;
+        planeCollider = plane.GetComponent<Collider>();
+        planeCollider.enabled = false;
+        MeshRenderer meshRenderer = plane.GetComponent<MeshRenderer>();
+        meshRenderer.forceRenderingOff = true;
+
     }
 
     // Update is called once per frame

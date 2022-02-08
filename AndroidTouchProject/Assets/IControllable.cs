@@ -7,5 +7,5 @@ public interface IControllable
 
     void drag(List<Vector2> positions);
 
-    void tap();
+    void tap(Vector2 position);
 }

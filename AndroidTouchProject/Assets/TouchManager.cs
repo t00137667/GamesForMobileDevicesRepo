@@ -32,17 +32,20 @@ public class TouchManager : MonoBehaviour, ITouchController
         {
             print("i hit something");
             IControllable controllable = hitInfo.transform.GetComponent<IControllable>();
-            if (selectedObject != null)
+            if (selectedObject != null && controllable != selectedObject)
             {
+                // Tap manager behaviour: Only ONE Selected object at a time.
+                // Ensure all other objects are deselected.
                 for (int i = 0; i < controllables.Length; i++)
                 {
                     IControllable c = controllables[i];
                     c.selectToggle(false);
+                    print("Set to False");
                 }
                 selectedObject = null;
             }
             selectedObject = controllable;
-            selectedObject.selectToggle(true);
+            selectedObject.tap(position);
         }
         else
         {
@@ -53,14 +56,14 @@ public class TouchManager : MonoBehaviour, ITouchController
     public void ControllableFound(Vector2 touchPosition)
     {
         Ray tapRay = Camera.main.ScreenPointToRay(touchPosition);
-        Debug.DrawRay(tapRay.origin, tapRay.direction * 50, Color.red, 4f);
+        Debug.DrawRay(tapRay.origin, tapRay.direction * 50, Color.blue, 2f);
         RaycastHit hitInfo;
         if (Physics.Raycast(tapRay, out hitInfo))
         {
             IControllable controllable = hitInfo.transform.GetComponent<IControllable>();
             if (controllable == null)
             {
-                controllableFound = null;
+                ClearControllable();
                 print("Controllable not Found");
             }
             else
@@ -71,7 +74,7 @@ public class TouchManager : MonoBehaviour, ITouchController
         }
         else
         {
-            controllableFound = null;
+            ClearControllable();
         }
     }
 
