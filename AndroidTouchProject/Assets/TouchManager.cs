@@ -24,13 +24,13 @@ public class TouchManager : MonoBehaviour, ITouchController
 
     public void tap(Vector2 position)
     {
-        print("tapped at " + position);
+        //print("tapped at " + position);
         Ray tapRay = Camera.main.ScreenPointToRay(position);
         Debug.DrawRay(tapRay.origin, tapRay.direction * 50, Color.red, 4f);
         RaycastHit hitInfo;
         if (Physics.Raycast(tapRay, out hitInfo))
         {
-            print("i hit something");
+            //print("i hit something");
             IControllable controllable = hitInfo.transform.GetComponent<IControllable>();
             if (selectedObject != null && controllable != selectedObject)
             {
@@ -40,7 +40,7 @@ public class TouchManager : MonoBehaviour, ITouchController
                 {
                     IControllable c = controllables[i];
                     c.selectToggle(false);
-                    print("Set to False");
+                    //print("Set to False");
                 }
                 selectedObject = null;
             }
@@ -64,12 +64,12 @@ public class TouchManager : MonoBehaviour, ITouchController
             if (controllable == null)
             {
                 ClearControllable();
-                print("Controllable not Found");
+                //print("Controllable not Found");
             }
             else
             {
                 controllableFound = controllable;
-                print("Controllable Found");
+                //print("Controllable Found");
             }
         }
         else

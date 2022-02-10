@@ -28,7 +28,7 @@ public class TouchDeterminer : MonoBehaviour
             Touch[] all_touches = Input.touches;
             Touch firstTouch = all_touches[0];
             List<Vector2> touchPositions = new List<Vector2>();
-            print(firstTouch.phase);
+            //print(firstTouch.phase);
 
             switch (all_touches.Length)
             {
@@ -70,7 +70,33 @@ public class TouchDeterminer : MonoBehaviour
                     }
                     break;
                 case 2:
-                    print("Two fingers Detected");
+                    Touch secondTouch = all_touches[1];
+                    float starting_distance = Vector2.Distance(secondTouch.position,firstTouch.position);
+                    float relative_distance = 1;
+                    switch (secondTouch.phase)
+                    {
+                        case TouchPhase.Began:
+                            if (firstTouch.phase == TouchPhase.Began)
+                            {
+                                //float scaleRatio = (float)(adjustedScale - scaleDistance);
+                            }
+                            break;
+
+                        case TouchPhase.Moved:
+                            if (firstTouch.phase == TouchPhase.Moved)
+                            {
+
+                            }
+                            break;
+
+                        case TouchPhase.Stationary:
+
+                            break;
+
+                        case TouchPhase.Ended:
+
+                            break;
+                    }
                     break;
             }
         }
