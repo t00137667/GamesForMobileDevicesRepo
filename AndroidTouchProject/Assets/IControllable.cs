@@ -8,4 +8,8 @@ public interface IControllable
     void drag(List<Vector2> positions);
 
     void tap(Vector2 position);
+
+    void scale(float scaleFactor);
+
+    void updateScale();
 }

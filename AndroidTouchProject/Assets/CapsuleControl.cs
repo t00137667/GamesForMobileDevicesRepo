@@ -8,6 +8,8 @@ public class CapsuleControl : MonoBehaviour, IControllable
     private bool isSelected = false;
     Collider myCollider;
 
+    private Vector3 startingScale;
+
     public void drag(List<Vector2> positions)
     {
         Vector2 position = positions[positions.Count - 1];
@@ -68,11 +70,23 @@ public class CapsuleControl : MonoBehaviour, IControllable
     {
         myRenderer = GetComponent<Renderer>();
         myCollider = GetComponent<Collider>();
+
+        startingScale = transform.localScale;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void scale(float scaleFactor)
+    {
+        transform.localScale = startingScale * scaleFactor;
+    }
+
+    public void updateScale()
+    {
+        startingScale = transform.localScale;
     }
 }
