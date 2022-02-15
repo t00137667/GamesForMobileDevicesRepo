@@ -7,6 +7,8 @@ public class SphereControl : MonoBehaviour, IControllable
     Renderer myRenderer;
     Collider planeCollider, sphereCollider;
     private bool isSelected = false;
+
+    private Vector3 startingScale;
     public void drag(List<Vector2> positions)
     {
         Vector2 position = positions[positions.Count - 1];
@@ -78,11 +80,23 @@ public class SphereControl : MonoBehaviour, IControllable
         MeshRenderer meshRenderer = plane.GetComponent<MeshRenderer>();
         meshRenderer.forceRenderingOff = true;
 
+        startingScale = transform.localScale;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void scale(float scaleFactor)
+    {
+        transform.localScale = startingScale * scaleFactor;
+    }
+
+    public void updateScale()
+    {
+        startingScale = transform.localScale;
     }
 }

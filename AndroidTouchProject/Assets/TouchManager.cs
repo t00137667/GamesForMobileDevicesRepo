@@ -8,9 +8,13 @@ public class TouchManager : MonoBehaviour, ITouchController
     IControllable selectedObject = null;
     IControllable controllableFound;
     IControllable[] controllables;
+
+    
+    private float scaleFactor = 1f;
+
     public void drag(List<Vector2> positions)
     {
-        print("I have been dragged");
+        //print("I have been dragged");
         if (selectedObject != null && controllableFound == selectedObject)
         {
             selectedObject.drag(positions);
@@ -19,7 +23,10 @@ public class TouchManager : MonoBehaviour, ITouchController
 
     public void pinch(Vector2 position1, Vector2 position2, float relative_distance)
     {
-        throw new System.NotImplementedException();
+        if (selectedObject != null)
+        {
+            selectedObject.scale(relative_distance * scaleFactor);
+        }
     }
 
     public void tap(Vector2 position)
@@ -81,6 +88,14 @@ public class TouchManager : MonoBehaviour, ITouchController
     public void ClearControllable()
     {
         controllableFound = null;
+    }
+
+    public void UpdateScale()
+    {
+        if (selectedObject != null)
+        {
+            selectedObject.updateScale();
+        }
     }
 
     // Start is called before the first frame update

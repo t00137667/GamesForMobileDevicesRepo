@@ -7,12 +7,14 @@ public class CubeControl : MonoBehaviour, IControllable
     //Collider collider;
     private bool isSelected = false;
     Renderer cubeRenderer;
-    
+    private Vector3 startingScale;
+
     // Start is called before the first frame update
     void Start()
     {
         //collider = gameObject.GetComponent<Collider>();
         cubeRenderer = GetComponent<Renderer>();
+        startingScale = transform.localScale;
     }
 
     // Update is called once per frame
@@ -54,5 +56,15 @@ public class CubeControl : MonoBehaviour, IControllable
     {
         isSelected = !isSelected;
         ColourUpdate();
+    }
+
+    public void scale(float scaleFactor)
+    {
+        transform.localScale = startingScale * scaleFactor;
+    }
+
+    public void updateScale()
+    {
+        startingScale = transform.localScale;
     }
 }
