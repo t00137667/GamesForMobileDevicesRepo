@@ -9,6 +9,8 @@ public class CapsuleControl : MonoBehaviour, IControllable
     Collider myCollider;
 
     private Vector3 startingScale;
+    private Vector3 startingPosition;
+    private Quaternion startingRotation;
 
     public void drag(List<Vector2> positions)
     {
@@ -19,12 +21,12 @@ public class CapsuleControl : MonoBehaviour, IControllable
         ColliderToggle();
         if (Physics.Raycast(tapRay, out hitInfo))
         {
-            print("i hit something");
+            //print("i hit something");
             transform.position = hitInfo.point;
         }
         else
         {
-            print("I hit nothing");
+            //print("I hit nothing");
         }
         ColliderToggle();
     }
@@ -72,6 +74,9 @@ public class CapsuleControl : MonoBehaviour, IControllable
         myCollider = GetComponent<Collider>();
 
         startingScale = transform.localScale;
+        startingPosition = transform.position;
+        startingRotation = transform.rotation;
+
     }
 
     // Update is called once per frame
@@ -88,5 +93,16 @@ public class CapsuleControl : MonoBehaviour, IControllable
     public void updateScale()
     {
         startingScale = transform.localScale;
+    }
+
+    public void rotate(float rotation)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void resetPosition()
+    {
+        transform.position = startingPosition;
+        transform.rotation = startingRotation;
     }
 }

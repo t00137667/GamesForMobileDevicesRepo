@@ -11,5 +11,9 @@ public interface IControllable
 
     void scale(float scaleFactor);
 
+    void rotate(float rotation);
+
     void updateScale();
+
+    void resetPosition();
 }
