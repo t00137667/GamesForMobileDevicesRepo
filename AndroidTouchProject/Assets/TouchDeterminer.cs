@@ -9,6 +9,9 @@ public class TouchDeterminer : MonoBehaviour
     private float MAX_ALLOWED_TAP_TIME = 0.2f;
     private bool hasMoved;
     private float startingDistance;
+    private float startingRotation;
+    private Vector3 startingVector;
+    private Vector2 startingMidpoint;
 
     TouchManager manager;
 
@@ -48,7 +51,7 @@ public class TouchDeterminer : MonoBehaviour
                             hasMoved = true;
                             if (tapTimer > MAX_ALLOWED_TAP_TIME && hasMoved)
                             {
-                                manager.drag(touchPositions);
+                                manager.drag(touchPositions, firstTouch);
                             }
                             break;
 
@@ -67,15 +70,21 @@ public class TouchDeterminer : MonoBehaviour
                     break;
                 case 2:
                     Touch secondTouch = all_touches[1];
+                    Vector2 midPoint = firstTouch.position + (secondTouch.position - firstTouch.position) / 2;
+                    Vector2 midPointUp = midPoint + (midPoint * Vector3.up);
+                    Debug.DrawLine(Camera.main.ScreenToWorldPoint(new Vector3(midPoint.x, midPoint.y, 5)), Camera.main.ScreenToWorldPoint(new Vector3(midPointUp.x, midPointUp.y,5)), Color.cyan, 0.0f, false) ;
+                    Debug.DrawLine(Camera.main.ScreenToWorldPoint(new Vector3(firstTouch.position.x, firstTouch.position.y, 5)), Camera.main.ScreenToWorldPoint(new Vector3(secondTouch.position.x, secondTouch.position.y, 5)), Color.blue, 0.0f, false);
                     switch (secondTouch.phase)
                     {
                         case TouchPhase.Began:
                             startingDistance = Vector2.Distance(secondTouch.position, firstTouch.position);
+                            startingRotation = Mathf.Atan2(secondTouch.position.y - firstTouch.position.y, secondTouch.position.x - firstTouch.position.x);
+                            startingVector = Camera.main.ScreenToWorldPoint(firstTouch.position) - Camera.main.ScreenToWorldPoint(secondTouch.position);
+                            startingMidpoint = midPoint;
                             if (firstTouch.phase == TouchPhase.Stationary)
                             {
                                 //float scaleRatio = (float)(adjustedScale - scaleDistance);
-                                
-                                print("Both touches began");
+                                //print("Both touches began");
                                 //print(startingDistance);
                             }
                             break;
@@ -86,11 +95,34 @@ public class TouchDeterminer : MonoBehaviour
                             {
                                 float currentDistance = Vector2.Distance(secondTouch.position, firstTouch.position);
                                 float relative_distance = currentDistance / startingDistance;
-                                //print(relative_distance);
-                                manager.pinch(firstTouch.position, secondTouch.position, relative_distance);
+                                print("RedDist: " + relative_distance);
+                                
+
+                                float currentRotation = Mathf.Atan2(secondTouch.position.y - firstTouch.position.y, secondTouch.position.x - firstTouch.position.x);
+                                float relativeRotation = currentRotation - startingRotation;
+                                print("RelRotate: " + relativeRotation);
+                                
+
+                                if (relativeRotation > -0.1f && relativeRotation < 0.1f && relative_distance < 1.1f && relative_distance > 0.9f)
+                                {
+                                    Vector2 relativeMidpoint = Camera.main.ScreenToWorldPoint(new Vector3(midPoint.x, midPoint.y, 1)) - Camera.main.ScreenToWorldPoint(new Vector3(startingMidpoint.x, startingMidpoint.y, 1));
+                                    manager.drag2(relativeMidpoint);
+                                }
+                                else
+                                {
+                                    
+                                    if (relativeRotation > 0.03f || relativeRotation < 0.03f)
+                                    {
+                                        manager.rotate(relativeRotation * Mathf.Rad2Deg);
+                                    }
+                                    if (relative_distance > 1.2 || relative_distance < 0.8)
+                                    {
+                                        manager.pinch(firstTouch.position, secondTouch.position, relative_distance);
+                                    }
+                                }
                             }
                             break;
-
+                            
                         case TouchPhase.Stationary:
                             if (firstTouch.phase == TouchPhase.Stationary)
                             {

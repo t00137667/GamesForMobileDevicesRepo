@@ -6,8 +6,12 @@ public class CubeControl : MonoBehaviour, IControllable
 {
     //Collider collider;
     private bool isSelected = false;
+    bool rotationStarted = false;
+    private Quaternion startingOrientation;
+    private Quaternion workingOrientation;
     Renderer cubeRenderer;
     private Vector3 startingScale;
+    private Vector3 startingPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +19,9 @@ public class CubeControl : MonoBehaviour, IControllable
         //collider = gameObject.GetComponent<Collider>();
         cubeRenderer = GetComponent<Renderer>();
         startingScale = transform.localScale;
+        startingOrientation = transform.rotation;
+        workingOrientation = startingOrientation;
+        startingPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -66,5 +73,27 @@ public class CubeControl : MonoBehaviour, IControllable
     public void updateScale()
     {
         startingScale = transform.localScale;
+        rotationStarted=false;
+    }
+
+    public void rotate(float rotation)
+    {
+        if (!rotationStarted)
+        {
+            rotationStarted = true;
+            workingOrientation = transform.rotation;
+        }
+
+        else
+        {
+            transform.rotation = Quaternion.AngleAxis(rotation, Camera.main.transform.forward) * startingOrientation  ;
+        }
+      //  transform.Rotate(0, 0, rotation);
+    }
+
+    public void resetPosition()
+    {
+        transform.position = startingPosition;
+        transform.rotation = startingOrientation;
     }
 }

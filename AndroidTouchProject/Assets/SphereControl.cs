@@ -9,6 +9,9 @@ public class SphereControl : MonoBehaviour, IControllable
     private bool isSelected = false;
 
     private Vector3 startingScale;
+    private Vector3 startingPosition;
+    private Quaternion startingRotation;
+
     public void drag(List<Vector2> positions)
     {
         Vector2 position = positions[positions.Count - 1];
@@ -81,6 +84,8 @@ public class SphereControl : MonoBehaviour, IControllable
         meshRenderer.forceRenderingOff = true;
 
         startingScale = transform.localScale;
+        startingPosition = transform.position;
+        startingRotation = transform.rotation;
 
     }
 
@@ -98,5 +103,16 @@ public class SphereControl : MonoBehaviour, IControllable
     public void updateScale()
     {
         startingScale = transform.localScale;
+    }
+
+    public void rotate(float rotation)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void resetPosition()
+    {
+        transform.position = startingPosition;
+        transform.rotation = startingRotation;
     }
 }
