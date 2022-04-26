@@ -493,6 +493,8 @@ public class lb_Bird : MonoBehaviour {
 			birdCollider.size = new Vector3(0.1f,0.01f,0.1f)*controller.birdScale;
 			GetComponent<Rigidbody>().isKinematic = false;
 			GetComponent<Rigidbody>().useGravity = true;
+			GameManager gameManager = FindObjectOfType<GameManager>();
+			gameManager.IncrementScore(1);
 		}
 	}
 

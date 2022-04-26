@@ -6,6 +6,7 @@ using UnityEngine.Advertisements;
 
 public class UnityAdScript : MonoBehaviour, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
 {
+    GameManager gameManager;
     string gameId = "4043017";
     bool testMode = true;
     bool perPlacementMode = false;
@@ -38,7 +39,7 @@ public class UnityAdScript : MonoBehaviour, IUnityAdsInitializationListener, IUn
     void Start()
     {
         Advertisement.Initialize(gameId, testMode, perPlacementMode);
-
+        gameManager = FindObjectOfType<GameManager>();
         // Get the Ad Unit ID for the current platform:
 #if UNITY_IOS
         _rewardedAdUnitId = _iOSAdUnitId;
@@ -64,9 +65,12 @@ public class UnityAdScript : MonoBehaviour, IUnityAdsInitializationListener, IUn
         _loadBannerButton.onClick.AddListener(LoadBanner);
         _loadBannerButton.interactable = true;
 
-        
+
         //LoadRewardedAd();
         //LoadAd();
+        LoadBanner();
+        ShowBannerAd();
+        _showBannerButton.enabled = false;
     }
 
     public void LoadBanner()
@@ -210,9 +214,10 @@ public class UnityAdScript : MonoBehaviour, IUnityAdsInitializationListener, IUn
         {
             Debug.Log("Unity Ads Rewarded Ad Completed");
             // Grant a reward.
-            Debug.Log("You get 10 reward!");
+            Debug.Log("You get 50 Score!");
             // Load another ad:
             Advertisement.Load(_rewardedAdUnitId, this);
+            gameManager.IncrementScore(50);
         }
     }
 

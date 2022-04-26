@@ -10,11 +10,13 @@ public class AdMobScript : MonoBehaviour
     private RewardedAd rewardedAd;
     private InterstitialAd interstitial;
     private bool intersitialRequested = false;
+    GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
         MobileAds.Initialize(initStatus => { });
+        gameManager = FindObjectOfType<GameManager>();
 
         string adUnitId;
         #if UNITY_ANDROID
@@ -87,6 +89,7 @@ public class AdMobScript : MonoBehaviour
         MonoBehaviour.print(
              "HandleRewardedAdRewarded event received for "
                  + amount.ToString() + " " + type);
+        gameManager.IncrementScore(50);
     }
     public void HandleRewardedAdLoaded(object sender, EventArgs args)
     {
