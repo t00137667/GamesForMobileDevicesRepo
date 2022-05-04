@@ -6,11 +6,13 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    GameObject score_object;
     Text score;
     // Start is called before the first frame update
     void Start()
     {
-        score = FindObjectOfType<Text>();
+        score_object = GameObject.FindGameObjectWithTag("score_text");
+        score = score_object.GetComponent<Text>();
         score.text = "0";
     }
 

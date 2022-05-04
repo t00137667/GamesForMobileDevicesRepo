@@ -53,7 +53,7 @@ public class AdMobScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.realtimeSinceStartup > 6 && !intersitialRequested)
+        if (Time.realtimeSinceStartup > 30 && !intersitialRequested)
         {
 
             if (this.interstitial.IsLoaded())
@@ -63,7 +63,7 @@ public class AdMobScript : MonoBehaviour
             Debug.Log("Interstitial Requested");
             intersitialRequested = true;
         }
-        if (Time.realtimeSinceStartup > 12)
+        if (Time.realtimeSinceStartup > 45)
         {
             this.interstitial.Destroy();
         }
