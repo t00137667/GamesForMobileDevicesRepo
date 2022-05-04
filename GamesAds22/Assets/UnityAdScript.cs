@@ -225,14 +225,14 @@ public class UnityAdScript : MonoBehaviour, IUnityAdsInitializationListener, IUn
     // Update is called once per frame
     void Update()
     {
-        if (Time.realtimeSinceStartup > 6 && !intersitialRequested )
+        if (Time.realtimeSinceStartup > 60 && !intersitialRequested )
         {
 
             ShowAd();
             Debug.Log("Interstitial Requested");
             intersitialRequested = true;
         }
-        if (Time.realtimeSinceStartup > 12)
+        if (Time.realtimeSinceStartup > 75)
         {
             _showRewardedAdButton.onClick.AddListener(ShowRewardedAd);
             // Enable the button for users to click:

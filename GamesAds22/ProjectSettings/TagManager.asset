@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - lb_groundTarget
+  - lb_perchTarget
+  - score_text
   layers:
   - Default
   - TransparentFX
